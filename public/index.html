@@ -47,7 +47,6 @@
 
         // Start game button click handler
         spinButton.onclick = () => {
-            // Simulate spinning
 
             fetch('/slots/roll', { method: 'POST' })
                 .then(response => response.json())
@@ -57,7 +56,10 @@
                         return
                     }
                     setDisable()
+
+                    // Simulate spinning
                     document.querySelectorAll('.slot').forEach((slot, index) => slot.textContent = 'X');
+
                     const [slot1, slot2, slot3] = data.results
                     setTimeout(() => document.getElementById('slot1').textContent = slot1.name, 1000);
                     setTimeout(() => document.getElementById('slot2').textContent = slot2.name, 2000);
@@ -74,13 +76,7 @@
                         })
                     }, 3000);
                 })
-                .catch(err => {
-                    console.error('err: ', err)
-                    // Not enough credits
-                    // if (err) {
-
-                    // }
-                });
+                .catch(err => console.error('err: ', err));
         }
 
         // Cash out button click handler
