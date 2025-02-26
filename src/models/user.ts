@@ -10,6 +10,6 @@ export class User implements UserI {
         this.credits = credits
     }
     static new() {
-        return new User({ credits: 0 })
+        return new User({ credits: 10 })
     }
 }

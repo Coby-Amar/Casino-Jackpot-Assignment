@@ -1,10 +1,9 @@
 import express from 'express';
 import session from 'express-session';
 import dotenv from 'dotenv';
+import path from 'path';
 
 import routes from './routes';
-
-import { checkUserExistOrCreate } from './middlewares/session';
 
 // Load environment variables from the .env file
 dotenv.config();
@@ -22,9 +21,7 @@ app.use(session({
 }));
 
 app.use(express.json());
-
-// Setup app middleware
-app.use(checkUserExistOrCreate);
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Setup app routes
 app.use('/', routes);

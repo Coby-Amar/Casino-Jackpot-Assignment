@@ -15,4 +15,7 @@
 9. create app middleware so if user doesnt exist on session creates new one ( because there is no login for now ) 
 10. create model for user so that we can use later for now only has credits and added to session for now
 11. created bones for roll function <b>PR</b> - added sessions middleware .env and routes bones
-12. <b>PR</b> - moved tests to src folder and changed config to ts  
+12. <b>PR</b> - moved tests to src folder and changed config to ts
+13. implemented endpoints
+14. restructure the project folder for simplicity
+15. added tests <b>PR</b> - restructure project, implemented endpoints and added tests
