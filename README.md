@@ -19,3 +19,8 @@
 13. implemented endpoints
 14. restructure the project folder for simplicity
 15. added tests <b>PR</b> - restructure project, implemented endpoints and added tests
+16. created new endpoints for authentication and changed session data
+17. expanded user so that it has a balance 
+18. added jsondb for dev
+19. created middleware for db, validation, responses and error handling 
+20. added testing <b>PR</b> - created all enpoints, middlewares, db, expanded user and added paths

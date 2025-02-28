@@ -1,10 +1,13 @@
 import { Router } from 'express'
-import { handleStart, handleRoll, handleCashout } from './slots.hadlers';
+import { handleTopup, handleRoll, handleCashin, handleCashout } from './slots.hadlers';
+import { missingDataMiddleware } from '@middleware/validations.middleware';
 const router = Router()
 
-router.get('/start', handleStart);
+router.post('/topup', missingDataMiddleware, handleTopup);
 
 router.post('/roll', handleRoll);
+
+router.post('/cashin', missingDataMiddleware, handleCashin);
 
 router.post('/cashout', handleCashout);
 

@@ -1,73 +1,64 @@
-import request from 'supertest';
-import session from 'express-session';
+import TestAgent from 'supertest/lib/agent';
 
 import app from '../index';
+import { SLOTS_URL } from './consts';
+import { clearAllUsers } from './db';
+import { signupAndReturnAgent } from './utils';
 
-const activeSession = session({
-    secret: process.env.SESSION_SECRET || 'default_secret',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
-})
 
-const api = '/slots'
+let agent: TestAgent;
+describe('POST ' + SLOTS_URL + '/topup', () => {
+    beforeAll(async () => {
+        agent = await signupAndReturnAgent(app)
+    })
+    it('should add 20 to users balance and return balance = 20', async () => {
+        const res = await agent.post(SLOTS_URL + '/topup').send({ credits: 20 });
 
-beforeEach(() => {
-    app.use(activeSession);
-})
-
-describe(`GET ${api}/start`, () => {
-    it('should start the game and initialize session with 10 credits', async () => {
-        const response = await request(app).get(api + '/start');
-        expect(response.status).toBe(200);
-        expect(response.body).toBe(10);
+        expect(res.status).toBe(202);
+        expect(res.body).toBeDefined()
+        expect(res.body.balance).toBe(20)
+        expect(res.body.credits).toBe(10)
     });
 });
 
-describe(`POST ${api}/roll`, () => {
-    it('should return roll results', async () => {
-        const agent = request.agent(app);
+describe('POST ' + SLOTS_URL + '/cashout', () => {
+    it('should cashout and return balance = 30, credits = 0', async () => {
+        const res = await agent.post(SLOTS_URL + '/cashout').send({ credits: 20 });
 
-        const startResponse = await agent.GET(api + '/start');
-        const initialCredits = startResponse.body;
+        expect(res.status).toBe(202);
+        expect(res.body).toBeDefined()
+        expect(res.body.balance).toBe(30)
+        expect(res.body.credits).toBe(0)
+    });
+});
 
-        const rollResponse = await agent.POST(api + '/roll');
+describe('POST ' + SLOTS_URL + '/cashin', () => {
+    it('should cashin and return balance = 10, credits = 20', async () => {
+        const res = await agent.post(SLOTS_URL + '/cashin').send({ credits: 20 });
 
-        expect(rollResponse.status).toBe(200);
-        expect(rollResponse.body.results).toHaveLength(3);
-        expect(rollResponse.body.isWinner).toBeDefined();
-        if (rollResponse.body.isWinner) {
-            expect(rollResponse.body.credits).toBeGreaterThan(initialCredits);
+        expect(res.status).toBe(202);
+        expect(res.body).toBeDefined()
+        expect(res.body.balance).toBe(10)
+        expect(res.body.credits).toBe(20)
+    });
+});
+
+describe('POST ' + SLOTS_URL + '/roll', () => {
+    it('should roll and return isWinner, credits, and results', async () => {
+        const res = await agent.post(SLOTS_URL + '/roll');
+
+        expect(res.status).toBe(200);
+        expect(res.body).toBeDefined()
+        expect(res.body.isWinner).toBeDefined()
+        expect(res.body.results).toBeDefined()
+        expect(res.body.results).toHaveLength(3)
+        if (res.body.isWinner) {
+            expect(res.body.credits).toBeGreaterThan(20)
         } else {
-            expect(rollResponse.body.credits).toBe(initialCredits - 1);
+            expect(res.body.credits).toBe(19)
         }
     });
-
-    it('should roll until no more credits and return {error: "Not enough credits"}', async () => {
-        const agent = request.agent(app);
-
-        await agent.GET(api + '/start');
-
-        let rollResponse
-        do {
-            rollResponse = await agent.POST(api + '/roll');
-
-        } while (rollResponse.status === 200);
-
-        expect(rollResponse.status).toBe(400);
-        expect(rollResponse.body.error).toBe("Not enough credits");
-    });
-});
-
-describe(`POST ${api}/cashout`, () => {
-    it('should cashout and return 10', async () => {
-        const agent = request.agent(app);
-
-        await agent.get(api + '/start');
-
-        const cashoutResponse = await agent.post(api + '/cashout');
-
-        expect(cashoutResponse.status).toBe(200);
-        expect(cashoutResponse.body).toBe(10);
-    });
+    afterAll(async () => {
+        await clearAllUsers(app)
+    })
 });

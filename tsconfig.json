@@ -18,7 +18,13 @@
     "types": [
       "node",
       "jest"
-    ]
+    ],
+    "baseUrl": "./src",
+    "paths": {
+      "@middleware/*": [
+        "middleware/*"
+      ],
+    }
   },
   "include": [
     "./src/**/*.ts",
