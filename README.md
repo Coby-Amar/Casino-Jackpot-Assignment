@@ -1,5 +1,9 @@
 # Casino Jackpot Assignment
 
+## Command
+
+<b>DEV</b> = `npm run dev`
+
 ## Thoughts 
 
 **UCP - means used/using chatgpt prompt
@@ -24,3 +28,6 @@
 18. added jsondb for dev
 19. created middleware for db, validation, responses and error handling 
 20. added testing <b>PR</b> - created all enpoints, middlewares, db, expanded user and added paths
+21. init clients and connecting to server then using LiveReload Web extension and package
+22. finished builing client <b>PR</b> - done adding everything how its good
+
