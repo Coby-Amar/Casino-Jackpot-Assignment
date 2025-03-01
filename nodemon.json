@@ -1,7 +1,8 @@
 {
     "watch": [
-        "src"
+        "src",
+        "public"
     ],
-    "ext": "ts",
+    "ext": "ts, html",
     "exec": "ts-node -r tsconfig-paths/register ./src/index.ts"
 }

@@ -1,0 +1,40 @@
+/* Input.module.css */
+
+/* Container for the input element */
+.inputContainer {
+    margin-bottom: 16px;
+}
+
+/* Label for the input */
+.label {
+    display: block;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* Input field styling */
+.inputField {
+    width: 100%;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    padding: 12px;
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #f7f7f7;
+    transition: border-color 0.3s ease;
+}
+
+.inputField:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Error message styling */
+.errorMessage {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
